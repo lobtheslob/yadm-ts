@@ -9,6 +9,8 @@ set cursorline
 highlight LineNr term=underline ctermfg=1
 highlight Cursorline cterm=NONE ctermfg=NONE term=underline
 highlight CursorLineNr term=bold cterm=bold ctermfg=3 gui=bold
+"" curly boy highlighting
+highlight MatchParen cterm=none ctermbg=darkgray ctermfg=white
 "" line numbering
 set number
 "" bind <C-@> to toggle number, because it's annoying sometimes
@@ -64,6 +66,16 @@ let g:ale_linters = {
       \}
 "let g:ale_yaml_yamllint_options = "-d 'document-start: disable'"
 let g:ale_fix_on_save = 1
+
+" Plugins will be downloaded under the specified directory.
+call plug#begin('~/.vim/plugged')
+
+" Declare the list of plugins.
+Plug 'tpope/vim-sensible'
+Plug 'junegunn/seoul256.vim'
+
+" List ends here. Plugins become visible to Vim after this call.
+call plug#end()
 
 "" lightline configuration:
 "" might want export TERM=xterm-256color
