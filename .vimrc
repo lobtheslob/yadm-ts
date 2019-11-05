@@ -1,6 +1,25 @@
 " ~/.vimrc
+
+" Plugins will be downloaded under the specified directory.
+call plug#begin('~/.vim/plugged')
+
+" Declare the list of plugins.
+Plug 'dense-analysis/ale'
+Plug 'itchyny/lightline.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'junegunn/vim-easy-align'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-sleuth'
+
+" List ends here. Plugins become visible to Vim after this call.
+call plug#end()
+
+
 "" enable pathogen
-execute pathogen#infect()
+"execute pathogen#infect()
+
 "" colors mmm
 syntax on
 colorscheme peachpuff
@@ -66,16 +85,6 @@ let g:ale_linters = {
       \}
 "let g:ale_yaml_yamllint_options = "-d 'document-start: disable'"
 let g:ale_fix_on_save = 1
-
-" Plugins will be downloaded under the specified directory.
-call plug#begin('~/.vim/plugged')
-
-" Declare the list of plugins.
-Plug 'tpope/vim-sensible'
-Plug 'junegunn/seoul256.vim'
-
-" List ends here. Plugins become visible to Vim after this call.
-call plug#end()
 
 "" lightline configuration:
 "" might want export TERM=xterm-256color
