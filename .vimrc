@@ -4,6 +4,7 @@
 call plug#begin('~/.vim/plugged')
 
 " Declare the list of plugins.
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'dense-analysis/ale'
 Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'

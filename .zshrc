@@ -18,6 +18,7 @@ export PATH=$PATH:/usr/local/go/bin
 export PATH=/Users/`whoami`/Library/Python/3.7/bin/:$PATH
 export PATH=~/bin:$PATH
 export PATH=$HOME/bin:$HOME/Library/Python/3.7/bin:$PATH
+export PATH=$PATH:$HOME/go/bin
 export NODE_ENV='dev'
 export EDITOR=vim
 export VISUAL=$EDITOR
