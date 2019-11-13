@@ -57,6 +57,10 @@ map <C-n> :NERDTreeToggle<CR>
 "" Hide help button in NERDTree
 let NERDTreeMinimalUI=1
 
+" fix :E command after Syntastic install (created new Errors command that interfered)
+cabbrev E NERDTreeToggle
+
+
 "" Configure vim-easy-align
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
