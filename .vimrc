@@ -13,6 +13,14 @@ Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-sleuth'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'jelera/vim-javascript-syntax'
+Plug 'maksimr/vim-jsbeautify'
+Plug 'bubujka/emmet-vim'
+Plug 'duteng/emmet-vim-react-snippets'
+Plug 'sheerun/vim-polyglot'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -52,6 +60,19 @@ set wildmode=longest,list,full
 set wildmenu
 
 """" Plugin Configurations
+"" Map multicursor
+let g:multi_cursor_use_default_mapping=0
+
+" Default mapping
+let g:multi_cursor_start_word_key      = '<C-m>'
+let g:multi_cursor_select_all_word_key = '<M-n>'
+let g:multi_cursor_start_key           = 'g<C-m>'
+let g:multi_cursor_select_all_key      = 'g<M-n>'
+let g:multi_cursor_next_key            = '<C-m>'
+let g:multi_cursor_prev_key            = '<C-p>'
+let g:multi_cursor_skip_key            = '<C-x>'
+let g:multi_cursor_quit_key            = '<Esc>'
+
 "" Map Nerdtree to CTRL+N
 map <C-n> :NERDTreeToggle<CR>
 "" Hide help button in NERDTree

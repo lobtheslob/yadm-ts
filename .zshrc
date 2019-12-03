@@ -17,7 +17,6 @@ export PATH=$PATH:$HOME/.rvm/bin
 export PATH=$PATH:/usr/local/go/bin
 export PATH=/Users/`whoami`/Library/Python/3.7/bin/:$PATH
 export PATH=~/bin:$PATH
-export PATH=$HOME/bin:$HOME/Library/Python/3.7/bin:$PATH
 export PATH=$PATH:$HOME/go/bin
 export NODE_ENV='dev'
 export EDITOR=vim
@@ -232,6 +231,7 @@ alias cra="create-react-app"
 alias work="cd ~/Documents/TeamKapteyn"
 alias chnpm="sudo chown -R $(whoami):staff"
 alias dc="docker-compose"
+alias dcup="docker-compose up"
 alias ll="ls -al"
 alias chrome='open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --args -remote-debugging-port=9222'
 alias binfix='/usr/bin/find ~/bin -type f | xargs chmod +x'
