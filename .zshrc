@@ -215,6 +215,8 @@ plugins=(
 #################################################
 ### Aliases
 #################################################
+alias lg="lazygit"
+alias ld="lazydocker"
 alias sub="open -a 'Sublime Text'"
 alias vis="open -a 'Visual Studio Code'"
 alias deis="cd /Users/samuelbernheim/Google\ Drive/Brandeis/Year\ 4"
@@ -252,10 +254,7 @@ alias dkcps='docker-compose ps'             # List docker-compose containers
 alias dkils='docker image ls'               # List images
 alias dkvls='docker volume ls'              # List volumes
 alias dkmls='docker-machine ls'             # List docker-machines
-
-
 alias dkstoprm='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
-
 # Clean up exited containers (docker < 1.13)
 alias dkrmC='docker rm $(docker ps -qaf status=exited)'
 
@@ -267,6 +266,15 @@ alias dkplI='docker images --format "{{ .Repository }}" | grep -v "^<none>$" | x
 
 # Clean up dangling volumes (docker < 1.13)
 alias dkrmV='docker volume rm $(docker volume ls -qf dangling=true)'
+
+# kills all running docker containers, and does a minimal clean
+alias docker-stupid='docker-compose down ; docker stop $(docker ps -aq) ; docker rm $(docker ps -qa) ; docker network rm $(docker network ls | grep "bridge" | awk "/ / { print $1 }")'
+
+# kills all running docker containers, and does a larger clean
+alias dmclean='docker-compose down ; docker stop $(docker ps -aq) ; docker rm $(docker ps -qa) ; docker network rm $(docker network ls | grep "bridge" | awk "/ / { print $1 }") ; docker rmi $(docker images --filter "dangling=true" -q --no-trunc)'
+
+# kills all running docker containers, and purges everything docker has done
+alias dmpurge='docker-compose down ; docker stop $(docker ps -aq) ; docker rm $(docker ps -qa) ; docker network rm $(docker network ls | grep "bridge" | awk "/ / { print $1 }") ; docker volume ls | grep -v DRIVER | while read driver name ; do docker volume rm $name ; done ; docker image ls -a | grep -v "REPOSITORY" | while read repo tag image etc ; do docker rmi $image --force ; done'
 
 startover() {
   echo 'Killing everything'

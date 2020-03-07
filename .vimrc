@@ -39,6 +39,8 @@ highlight Cursorline cterm=NONE ctermfg=NONE term=underline
 highlight CursorLineNr term=bold cterm=bold ctermfg=3 gui=bold
 "" curly boy highlighting
 highlight MatchParen cterm=none ctermbg=darkgray ctermfg=white
+"" Visual mode highlighting
+highlight Visual cterm=reverse ctermbg=NONE
 "" line numbering
 set number
 "" bind <C-@> to toggle number, because it's annoying sometimes
