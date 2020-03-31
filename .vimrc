@@ -61,6 +61,13 @@ set scrolloff=6
 set wildmode=longest,list,full
 set wildmenu
 
+" unjanky the janky of pressing "u" in visual block mode
+" this stops the accidental lowercasing of blocks of code
+xnoremap u <nop>
+xnoremap U <nop>
+nnoremap gu <nop>
+nnoremap gU <nop>
+
 """" Plugin Configurations
 "" Map multicursor
 let g:multi_cursor_use_default_mapping=0
