@@ -21,6 +21,15 @@ export PATH=$PATH:$HOME/go/bin
 export NODE_ENV='dev'
 export EDITOR=vim
 export VISUAL=$EDITOR
+
+# change the size of history
+export HISTSIZE=2000
+export HISTFILE="$HOME/.history"
+export SAVEHIST=$HISTSIZE
+
+setopt hist_ignore_all_dups
+setopt hist_ignore_space
+
 # tmux complains about color scheme
 #
 
@@ -247,6 +256,7 @@ alias dmstart="dm start && dmcfg && devupdate && appupdate && dmclean"
 alias policyupdate="adgpupdate"
 alias appbash="docker run -it -v '/`pwd`':'//code' -v $HOME'/.npmrc':'//root/.npmrc' --rm --volumes-from npmcachervol:rw --volumes-from ${PWD##*/}-npm:rw --entrypoint=bash 287054460789.dkr.ecr.us-east-1.amazonaws.com/polaris/appenv-angular2-polarisplatform"
 alias devbash="docker run -it -v '/`pwd`':'//code' -v $HOME'/.npmrc':'//root/.npmrc' --rm --volumes-from npmcachervol:rw --volumes-from ${PWD##*/}-npm:rw --entrypoint=bash 287054460789.dkr.ecr.us-east-1.amazonaws.com/polaris/devenv-nodejs-polarisplatform"
+alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
 # Docker JJ
 alias dkpsa='docker ps -a'                  # List all containers (default lists just running)
 alias dkcls='docker container ls'           # List containers
@@ -315,7 +325,6 @@ fo() {
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-
 
 
 #####################################################################################
@@ -562,4 +571,4 @@ export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
 export LESS_TERMCAP_mr=$(tput rev)
 export LESS_TERMCAP_mh=$(tput dim)
 eval "$(rbenv init -)"
-eval $(thefuck --alias)
+#eval $(thefuck --alias)

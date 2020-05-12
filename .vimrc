@@ -25,6 +25,11 @@ Plug 'sheerun/vim-polyglot'
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
+if exists('g:vscode')
+    " VSCode extension
+else
+    " ordinary neovim
+endif
 
 "" enable pathogen
 "execute pathogen#infect()
@@ -134,6 +139,10 @@ let s:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
 let s:palette.inactive.middle = s:palette.normal.middle
 let s:palette.tabline.middle = s:palette.normal.middle
 
+"show tabs
+"----------------------
+" Shortcut to rapidly toggle `set list`
+map <tab> :set list!<CR>
 
 " disable arrow keys
 noremap <Up> <Nop>
