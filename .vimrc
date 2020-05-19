@@ -21,6 +21,7 @@ Plug 'maksimr/vim-jsbeautify'
 Plug 'bubujka/emmet-vim'
 Plug 'duteng/emmet-vim-react-snippets'
 Plug 'sheerun/vim-polyglot'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()

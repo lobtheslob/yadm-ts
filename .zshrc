@@ -30,11 +30,16 @@ export SAVEHIST=$HISTSIZE
 setopt hist_ignore_all_dups
 setopt hist_ignore_space
 
-# tmux complains about color scheme
-#
+# zsh autocomplete
+if type brew &>/dev/null; then
+    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+    autoload -Uz compinit
+    compinit
+fi
+
 
 #COPIED from .bashrc
-
 # If you have run proxify and or certify, load previous settings
 # These belong in .bashrc because they are non-login required
 test -f ~/.berkadia_certs && . ~/.berkadia_certs
@@ -408,6 +413,7 @@ zsh_docker_signal() {
 	echo -n "%{$color%}$symbol"
 }
 
+
 # Reload the plugin to highlight the commands each time Iterm2 starts 
 # source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
@@ -442,18 +448,6 @@ POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     time
 )
 
-# Add a second prompt line for the command
-POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-
-# Add a space in the first prompt 
-POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="%f"
-
-# Visual customisation of the second prompt line
-local user_symbol="$"
-if [[ $(print -P "%#") =~ "#" ]]; then
-    user_symbol = "#"
-fi
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%{%B%F{black}%K{yellow}%} $user_symbol%{%b%f%k%F{yellow}%} %{%f%}"
 
 # Custom uncommented POWERLEVEL9K const
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
@@ -570,5 +564,14 @@ export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 7)
 export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
 export LESS_TERMCAP_mr=$(tput rev)
 export LESS_TERMCAP_mh=$(tput dim)
-eval "$(rbenv init -)"
-#eval $(thefuck --alias)
+
+# The following lines were added by compinstall
+
+zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
+zstyle ':completion:*' max-errors 3 not-numeric
+zstyle :compinstall filename '/Users/tsimpson/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+[[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
