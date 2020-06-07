@@ -233,8 +233,8 @@ alias lg="lazygit"
 alias ld="lazydocker"
 alias sub="open -a 'Sublime Text'"
 alias vis="open -a 'Visual Studio Code'"
-alias deis="cd /Users/samuelbernheim/Google\ Drive/Brandeis/Year\ 4"
-alias gproj="cd ~/Github-Projects"
+alias cdw="cd /Users/TSimpson/Documents/TeamNewton"
+alias cdp="cd /Users/TSimpson/Documents/projects"
 alias vim="nvim"
 alias co="git checkout"
 alias cls="clear"
@@ -575,3 +575,4 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 [[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
+code () { VSCODE_CWD=/Users/tsimpson/Documents/TeamNewton/evaluation-deal-component open -n -b com.microsoft.VSCode --args  ;}
