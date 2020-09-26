@@ -1,14 +1,14 @@
-" ~/.vimrc
+"" ~/.vimrc
 
-" Plugins will be downloaded under the specified directory.
+"" Plugins will be downloaded under the specified directory.
 call plug#begin('~/.vim/plugged')
 
-" Declare the list of plugins.
+"" Declare the list of plugins.
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'dense-analysis/ale'
 Plug 'itchyny/lightline.vim'
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'scrooloose/nerdtree' 
+Plug 'Xuyuanp/nerdtree-git-plugin' 
 Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sensible'
@@ -22,6 +22,9 @@ Plug 'bubujka/emmet-vim'
 Plug 'duteng/emmet-vim-react-snippets'
 Plug 'sheerun/vim-polyglot'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'dracula/vim'
+Plug 'ryanoasis/vim-devicons'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -35,9 +38,25 @@ endif
 "" enable pathogen
 "execute pathogen#infect()
 
+"
+set encoding=UTF-8
+set guifont=Fira\ Code:h12
+
+" fzf
+nnoremap <C-p> :FZF<CR>
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit'
+  \}
+
 "" colors mmm
-syntax on
-colorscheme peachpuff
+if (has("termguicolors"))
+ set termguicolors
+endif
+syntax enable
+colorscheme dracula 
+"
 "" line highlighting
 set cursorline
 highlight LineNr term=underline ctermfg=1
@@ -88,11 +107,30 @@ let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
+" open new split panes to right and below
+set splitright
+set splitbelow
+" turn terminal to normal mode with escape
+tnoremap <Esc> <C-\><C-n>
+" start terminal in insert mode
+au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+" open terminal on ctrl+n
+function! OpenTerminal()
+  split term://bash
+  resize 10
+endfunction
+nnoremap <c-n> :call OpenTerminal()<CR>
+
 "" Map Nerdtree to CTRL+N
 map <C-n> :NERDTreeToggle<CR>
-"" Hide help button in NERDTree
-let NERDTreeMinimalUI=1
-
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeIgnore = []
+let g:NERDTreeStatusline = ''
+" Automaticaly close nvim if NERDTree is only thing left open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" Toggle
+nnoremap <silent> <C-b> :NERDTreeToggle<CR>
 " fix :E command after Syntastic install (created new Errors command that interfered)
 cabbrev E NERDTreeToggle
 
@@ -109,9 +147,13 @@ nmap ga <Plug>(EasyAlign)
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 let g:ale_completion_enabled = 1
+let g:ale_fix_on_save = 1
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+" good guy ale looks good
+let g:ale_sign_error = '●'
+let g:ale_sign_warning = '.'
 " python
 let g:ale_python_pylint_options = '--errors-only'
 " go
@@ -125,9 +167,22 @@ let g:ale_linters = {
       \'yaml': ['yamllint'],
       \}
 "let g:ale_yaml_yamllint_options = "-d 'document-start: disable'"
-let g:ale_fix_on_save = 1
 
+nmap <silent> <C-e> <Plug>(ale_next_wrap)
 "" lightline configuration:
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+    return l:counts.total == 0 ? 'OK' : printf(
+        \   '%d⨉ %d⚠ ',
+        \   all_non_errors,
+        \   all_errors
+        \)
+endfunction
+set statusline+=%=
+set statusline+=\ %{LinterStatus()}
+
 "" might want export TERM=xterm-256color
 set laststatus=2
 set noshowmode
@@ -145,8 +200,7 @@ let s:palette.tabline.middle = s:palette.normal.middle
 " Shortcut to rapidly toggle `set list`
 map <tab> :set list!<CR>
 
-" disable arrow keys
-noremap <Up> <Nop>
-noremap <Down> <Nop>
-noremap <Left> <Nop>
-noremap <Right> <Nop>
+
+
+
+
