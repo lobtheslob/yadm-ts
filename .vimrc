@@ -39,16 +39,6 @@ endif
 "execute pathogen#infect()
 
 "
-set encoding=UTF-8
-set guifont=Fira\ Code:h12
-
-" fzf
-nnoremap <C-p> :FZF<CR>
-let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-v': 'vsplit'
-  \}
 
 "" colors mmm
 if (has("termguicolors"))
@@ -121,6 +111,9 @@ function! OpenTerminal()
 endfunction
 nnoremap <c-n> :call OpenTerminal()<CR>
 
+"" Can be enabled or disabled
+let g:webdevicons_enable_nerdtree = 1
+
 "" Map Nerdtree to CTRL+N
 map <C-n> :NERDTreeToggle<CR>
 let g:NERDTreeShowHidden = 1
@@ -134,6 +127,13 @@ nnoremap <silent> <C-b> :NERDTreeToggle<CR>
 " fix :E command after Syntastic install (created new Errors command that interfered)
 cabbrev E NERDTreeToggle
 
+" fzf
+nnoremap <C-p> :FZF<CR>
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit'
+  \}
 
 "" Configure vim-easy-align
 " Start interactive EasyAlign in visual mode (e.g. vipga)
