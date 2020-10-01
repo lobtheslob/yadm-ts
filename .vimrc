@@ -24,10 +24,10 @@ Plug 'sheerun/vim-polyglot'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-startify'
+Plug 'fatih/vim-go'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver']
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'dracula/vim'
@@ -45,7 +45,19 @@ endif
 "" enable pathogen
 "execute pathogen#infect()
 
+"vim-go
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
+
+"coc
+let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver']
 "
+" Launch gopls when Go files are in use
+let g:LanguageClient_serverCommands = {
+       \ 'go': ['gopls']
+       \ }
+" Run gofmt on save
+autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
 
 "" colors mmm
 if (has("termguicolors"))
@@ -103,6 +115,22 @@ let g:multi_cursor_next_key            = '<C-m>'
 let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
+
+" set date
+nmap <F3> i<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>
+imap <F3> <C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR>
+
+" set relativenumber to reduce mental math
+set relativenumber
+
+" set registers to copy p
+set clipboard=unnamed
+set clipboard=unnamedplus
+
+" remap escape
+cnoremap kj <C-C>
+cnoremap jk <C-C>
+
 
 " open new split panes to right and below
 set splitright
