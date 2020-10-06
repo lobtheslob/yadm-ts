@@ -121,7 +121,7 @@ nmap <F3> i<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>
 imap <F3> <C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR>
 
 " set relativenumber to reduce mental math
-set relativenumber
+" set relativenumber
 
 " set registers to copy p
 set clipboard=unnamed
@@ -192,13 +192,16 @@ nmap ga <Plug>(EasyAlign)
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 let g:ale_completion_enabled = 1
+let g:ale_lint_on_enter = 0
 let g:ale_fix_on_save = 1
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 " good guy ale looks good
-let g:ale_sign_error = '●'
-let g:ale_sign_warning = '.'
+let g:ale_sign_error = '❌'
+let g:ale_sign_warning = '⚠️'
+"let g:ale_sign_error = '●'
+"let g:ale_sign_warning = '.'
 " python
 let g:ale_python_pylint_options = '--errors-only'
 " go
@@ -211,9 +214,13 @@ let g:ale_linters = {
       \'go': ['golint', 'gofmt'],
       \'yaml': ['yamllint'],
       \}
-"let g:ale_yaml_yamllint_options = "-d 'document-start: disable'"
+" yaml
+let g:ale_yaml_yamllint_options = "-d 'document-start: disable'"
+" js
+let g:ale_fixers = {
+ \ 'javascript': ['eslint']
+ \ }
 
-nmap <silent> <C-e> <Plug>(ale_next_wrap)
 "" lightline configuration:
 function! LinterStatus() abort
     let l:counts = ale#statusline#Count(bufnr(''))

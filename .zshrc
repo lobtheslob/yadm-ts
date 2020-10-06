@@ -21,6 +21,8 @@ export PATH=$PATH:$HOME/go/bin
 export NODE_ENV='dev'
 export EDITOR=vim
 export VISUAL=$EDITOR
+export DOTNET_DIR=/usr/local/share/dotnet
+export PATH=$DOTNET_DIR:$PATH
 
 # change the size of history
 export HISTSIZE=2000
