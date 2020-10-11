@@ -242,7 +242,7 @@ function code {
 #################
 #Work/Play Time
 #################
-alias rn= "rvm use 2.6.6" 
+alias rm="/Users/tsimpson/.nvm/versions/node/v14.8.0/bin/trash"
 alias wp= "/Users/TSimpson/Documents/TeamNewton" 
 alias lg="lazygit"
 alias ld="lazydocker"
