@@ -194,9 +194,17 @@ plugins=(
 
 )
 
-
-
-# source $ZSH/oh-my-zsh.sh
+# lauching code
+function code {
+    if [[ $# = 0 ]]
+    then
+        open -a "Visual Studio Code"
+    else
+        local argPath="$1"
+        [[ $1 = /* ]] && argPath="$1" || argPath="$PWD/${1#./}"
+        open -a "Visual Studio Code" "$argPath"
+    fi
+}
 
 # User configuration
 
@@ -317,7 +325,7 @@ startover() {
 }
 
 # k8s
-alias kap='kubectl delete all --all --all-namespaces' # kill all pods
+#alias kap='kubectl delete all --all --all-namespaces' # kill all pods
 alias rpds='~/bin/./start-local-kluster.sh' # start deals kluster
 alias wgp='watch kubectl get pods' # watcher for pods
 alias kctx=kubectx
@@ -361,210 +369,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
 
-#####################################################################################
-### Powerlevel 9k Settings - https://github.com/bhilburn/powerlevel9k
-#####################################################################################
-
-# Please only use this battery segment if you have material icons in your nerd font (or font)
-# Otherwise, use the font awesome one in "User Segments"
-prompt_zsh_battery_level() {
-  local percentage1=`pmset -g ps  |  sed -n 's/.*[[:blank:]]+*\(.*%\).*/\1/p'`
-  local percentage=`echo "${percentage1//\%}"`
-  local color='%F{red}'
-  local symbol="\uf00d"
-  pmset -g ps | grep "discharging" > /dev/null
-  if [ $? -eq 0 ]; then
-    local charging="false";
-  else
-    local charging="true";
-  fi
-  if [ $percentage -le 20 ]
-  then symbol='\uf579' ; color='%F{red}' ;
-    #10%
-  elif [ $percentage -gt 19 ] && [ $percentage -le 30 ]
-  then symbol="\uf57a" ; color='%F{red}' ;
-    #20%
-  elif [ $percentage -gt 29 ] && [ $percentage -le 40 ]
-  then symbol="\uf57b" ; color='%F{yellow}' ;
-    #35%
-  elif [ $percentage -gt 39 ] && [ $percentage -le 50 ]
-  then symbol="\uf57c" ; color='%F{yellow}' ;
-    #45%
-  elif [ $percentage -gt 49 ] && [ $percentage -le 60 ]
-  then symbol="\uf57d" ; color='%F{blue}' ;
-    #55%
-  elif [ $percentage -gt 59 ] && [ $percentage -le 70 ]
-  then symbol="\uf57e" ; color='%F{blue}' ;
-    #65%
-  elif [ $percentage -gt 69 ] && [ $percentage -le 80 ]
-  then symbol="\uf57f" ; color='%F{blue}' ;
-    #75%
-  elif [ $percentage -gt 79 ] && [ $percentage -le 90 ]
-  then symbol="\uf580" ; color='%F{blue}' ;
-    #85%
-  elif [ $percentage -gt 89 ] && [ $percentage -le 99 ]
-  then symbol="\uf581" ; color='%F{blue}' ;
-    #85%
-  elif [ $percentage -gt 98 ]
-  then symbol="\uf578" ; color='%F{green}' ;
-    #100%
-  fi
-  if [ $charging = "true" ];
-  then color='%F{green}'; if [ $percentage -gt 98 ]; then symbol='\uf584'; fi
-  fi
-  echo -n "%{$color%}$symbol" ;
-}
-
-# custom functions
-zsh_internet_signal(){
-  local color
-  local symbol="\uf7ba"
-  if ifconfig en0 | grep inactive &> /dev/null; then
-  color="%F{red}"
-  symbol="\ufaa9"
-  else
-  color="%F{green}"
-  symbol="\ufaa8"
-  fi
-  echo -n "%{$color%}$symbol"
-}
-
-zsh_docker_signal() {
-	local color
-	local symbol="\uf308"
-	docker=$(docker ps) &> /dev/null
-	if [ $? = 0 ]; then
-		color="%F{green}"
-	else
-		color="%F{red}"
-	fi
-
-	echo -n "%{$color%}$symbol"
-}
-
-
-# Reload the plugin to highlight the commands each time Iterm2 starts 
-# source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-
-### VISUAL CUSTOMISATION ### 
-
-# Elements options of left prompt (remove the @username)
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
-     dir
-     context
-    # custom_javascript
-    # custom_python
-    # custom_go
-    custom_internet_signal
-    custom_docker_signal
-    vcs 
-    #newline
-    rbenv
-    battery 
-    root_indicator 
-    #dir_writable
-)
-
-# Elements options of right prompt
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
-    status
-    command_execution_time  
-    root_indicator 
-    background_jobs
-    node_version 
-    history 
-    time
-)
-
-
-# Custom uncommented POWERLEVEL9K const
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
-POWERLEVEL9K_SHORTEN_STRATEGY="truncate_beginning"
-POWERLEVEL9K_RVM_BACKGROUND="black"
-POWERLEVEL9K_RVM_FOREGROUND="045"
-POWERLEVEL9K_RVM_VISUAL_IDENTIFIER_COLOR="red"
-POWERLEVEL9K_TIME_BACKGROUND="black"
-POWERLEVEL9K_TIME_FOREGROUND="darkturquoise"
-POWERLEVEL9K_TIME_FORMAT="\UF43A %D{%I:%M  \UF133  %m.%d.%y}"
-POWERLEVEL9K_RVM_BACKGROUND="black"
-POWERLEVEL9K_RVM_FOREGROUND="136"
-POWERLEVEL9K_RVM_VISUAL_IDENTIFIER_COLOR="red"
-POWERLEVEL9K_STATUS_VERBOSE=false
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND='black'
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='blue'
-POWERLEVEL9K_FOLDER_ICON=''
-POWERLEVEL9K_STATUS_OK_IN_NON_VERBOSE=true
-POWERLEVEL9K_STATUS_VERBOSE=false
-POWERLEVEL9K_STATUS_FOREGROUND="071"
-POWERLEVEL9K_STATUS_BACKGROUND="black"
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
-POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="%F{blue}\u256D\u2500%f"
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{blue}\u2570\uf460%f "
-POWERLEVEL9K_CUSTOM_DOCKER_SIGNAL="zsh_docker_signal"
-POWERLEVEL9K_CUSTOM_INTERNET_SIGNAL="zsh_internet_signal"
-POWERLEVEL9K_BATTERY_CHARGING='yellow'
-POWERLEVEL9K_BATTERY_CHARGED='green'
-POWERLEVEL9K_BATTERY_DISCONNECTED='$DEFAULT_COLOR'
-POWERLEVEL9K_BATTERY_LOW_THRESHOLD='10'
-POWERLEVEL9K_BATTERY_LOW_COLOR='red'
-POWERLEVEL9K_BATTERY_ICON='\uf1e6'
-HIST_STAMPS="mm/dd/yyyy"
-DISABLE_UPDATE_PROMPT=true
-
-# Change the git statuses
-POWERLEVEL9K_VCS_CLEAN_FOREGROUND='black'
-POWERLEVEL9K_VCS_CLEAN_BACKGROUND='green'
-POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='black'
-POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='yellow'
-POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='white'
-POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='red'
-POWERLEVEL9K_VCS_UNTRACKED_ICON='\u25CF'
-POWERLEVEL9K_VCS_UNSTAGED_ICON='\u00b1'
-POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON='\u2193'
-POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
-POWERLEVEL9K_VCS_COMMIT_ICON="\uf113"
-
-# Add a new line after the global prompt 
-POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
-
-# Colorise the top Tabs of Iterm2 with the same color as background
-# Just change the 18/26/33 wich are the rgb values 
-echo -e "\033]6;1;bg;red;brightness;18\a"
-echo -e "\033]6;1;bg;green;brightness;26\a"
-echo -e "\033]6;1;bg;blue;brightness;33\a"
-
-# Custom Function Echo to line
-POWERLEVEL9K_CUSTOM_DOCKER_SIGNAL="zsh_docker_signal"
-POWERLEVEL9K_CUSTOM_INTERNET_SIGNAL="zsh_internet_signal"
-
-# Create a custom JavaScript prompt section
-POWERLEVEL9K_CUSTOM_JAVASCRIPT="echo -n '\uE781' JavaScript"
-POWERLEVEL9K_CUSTOM_JAVASCRIPT_FOREGROUND="yellow"
-POWERLEVEL9K_CUSTOM_JAVASCRIPT_BACKGROUND="black"
-
-# Create a custom Node_Version prompt section
-POWERLEVEL9K_NODE_VERSION_FOREGROUND="083"
-POWERLEVEL9K_NODE_VERSION_BACKGROUND="black"
-
-# History
-POWERLEVEL9K_HISTORY="echo -n '\uf1da'"
-POWERLEVEL9K_HISTORY_FOREGROUND="deepskyblue4"
-POWERLEVEL9K_HISTORY_BACKGROUND="white"
-
-# Time
-POWERLEVEL9K_TIME_FOREGROUND="white"
-POWERLEVEL9K_TIME_BACKGROUND="deepskyblue4"
-
-# Create a custom Python prompt section
-# POWERLEVEL9K_CUSTOM_PYTHON="echo -n '\uf81f' Python"
-# POWERLEVEL9K_CUSTOM_PYTHON_FOREGROUND="black"
-# POWERLEVEL9K_CUSTOM_PYTHON_BACKGROUND="blue"
-
-# Create a custom Ruby prompt section
-# POWERLEVEL9K_CUSTOM_RUBY="echo -n '\ue21e' Ruby"
-# POWERLEVEL9K_CUSTOM_RUBY_FOREGROUND="black"
-# POWERLEVEL9K_CUSTOM_RUBY_BACKGROUND="red"
 
 # Create a custom Go prompt section
 POWERLEVEL9K_CUSTOM_GO="echo -n '\ue626' Go"

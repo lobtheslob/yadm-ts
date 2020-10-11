@@ -8,6 +8,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'dense-analysis/ale'
 Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree' 
+Plug 'OmniSharp/omnisharp-vim' 
 Plug 'Xuyuanp/nerdtree-git-plugin' 
 Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-fugitive'
@@ -32,6 +33,11 @@ Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'dracula/vim'
 Plug 'ryanoasis/vim-devicons'
+Plug 'inside/vim-search-pulse'
+Plug 'RRethy/vim-illuminate'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'airblade/vim-gitgutter'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -49,6 +55,9 @@ endif
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
 
+" Use deoplete.
+let g:deoplete#enable_at_startup = 1
+
 "coc
 let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver']
 "
@@ -65,7 +74,15 @@ if (has("termguicolors"))
 endif
 syntax enable
 colorscheme dracula 
-"
+
+"" omnisharp config
+inoremap <expr> <Tab> pumvisible() ? '<C-n>' :                                                                                                                    
+\ getline('.')[col('.')-2] =~# '[[:alnum:].-_#$]' ? '<C-x><C-o>' : '<Tab>'
+nnoremap <C-o><C-u> :OmniSharpFindUsages<CR>
+nnoremap <C-o><C-d> :OmniSharpGotoDefinition<CR>
+nnoremap <C-o><C-d><C-p> :OmniSharpPreviewDefinition<CR>
+nnoremap <C-o><C-r> :!dotnet run
+
 "" line highlighting
 set cursorline
 highlight LineNr term=underline ctermfg=1
