@@ -7,8 +7,8 @@ call plug#begin('~/.vim/plugged')
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'dense-analysis/ale'
 Plug 'itchyny/lightline.vim'
-Plug 'scrooloose/nerdtree' 
 Plug 'OmniSharp/omnisharp-vim' 
+Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin' 
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sensible'
@@ -30,7 +30,6 @@ Plug 'mhinz/vim-startify'
 Plug 'fatih/vim-go'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'dracula/vim'
@@ -39,7 +38,6 @@ Plug 'inside/vim-search-pulse'
 Plug 'RRethy/vim-illuminate'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'airblade/vim-gitgutter'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -57,12 +55,6 @@ endif
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
 
-" Use deoplete.
-let g:deoplete#enable_at_startup = 1
-
-"coc
-let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver']
-"
 " Launch gopls when Go files are in use
 let g:LanguageClient_serverCommands = {
        \ 'go': ['gopls']
