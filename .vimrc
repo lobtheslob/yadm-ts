@@ -4,61 +4,100 @@
 call plug#begin('~/.vim/plugged')
 
 "" Declare the list of plugins.
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'dense-analysis/ale'
-Plug 'itchyny/lightline.vim'
-Plug 'OmniSharp/omnisharp-vim' 
+
+" NERDTree
 Plug 'preservim/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin' 
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-sensible'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'PhilRunninger/nerdtree-buffer-ops'
+Plug 'PhilRunninger/nerdtree-visual-selection'
+
+" JS
+Plug 'mxw/vim-jsx'
+Plug 'pangloss/vim-javascript'
+Plug 'jelera/vim-javascript-syntax'
+Plug 'maksimr/vim-jsbeautify'
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'duteng/emmet-vim-react-snippets'
+Plug 'othree/yajs.vim'
+Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'claco/jasmine.vim'
+Plug 'lfilho/cosco.vim'
+
+
+" Vim Helpers
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-rhubarb'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-Plug 'jelera/vim-javascript-syntax'
-Plug 'maksimr/vim-jsbeautify'
-Plug 'bubujka/emmet-vim'
-Plug 'duteng/emmet-vim-react-snippets'
 Plug 'sheerun/vim-polyglot'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/gv.vim'
 Plug 'mhinz/vim-startify'
-Plug 'fatih/vim-go'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
 Plug 'dracula/vim'
-Plug 'ryanoasis/vim-devicons'
 Plug 'inside/vim-search-pulse'
 Plug 'RRethy/vim-illuminate'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'airblade/vim-gitgutter'
+Plug 'maralla/completor.vim'
+
+" GO 
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
+" Terraform
+Plug 'hashivim/vim-terraform'
+
+" GRAPHQL
+Plug 'jparise/vim-graphql'
+
+" Commenting
+Plug 'tomtom/tlib_vim'
+Plug 'tomtom/tcomment_vim'
+
+" HTML
+Plug 'mattn/emmet-vim'
+Plug 'slim-template/vim-slim'
+Plug 'mustache/vim-mustache-handlebars'
+
+" Tmux
+Plug 'tmux-plugins/vim-tmux'
+Plug 'christoomey/vim-tmux-navigator'
+
+" Visuals
+Plug 'altercation/vim-colors-solarized'
+
+" DevIcons looded last
+Plug 'ryanoasis/vim-devicons'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
-if exists('g:vscode')
-    " VSCode extension
-else
-    " ordinary neovim
-endif
-
-"" enable pathogen
-"execute pathogen#infect()
+"if exists('g:vscode')
+"    " VSCode extension
+"else
+"    " ordinary neovim
+"endif
 
 "vim-go
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
 
+" Use new vim 8.2 popup windows for Go Doc
+let g:go_doc_popup_window = 1
+
+" Enable lsp for go by using gopls
+let g:completor_filetype_map = {}
+let g:completor_filetype_map.go = {'ft': 'lsp', 'cmd': 'gopls -remote=auto'}"
+
 " Launch gopls when Go files are in use
 let g:LanguageClient_serverCommands = {
        \ 'go': ['gopls']
        \ }
+
 " Run gofmt on save
 autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
 
@@ -69,13 +108,13 @@ endif
 syntax enable
 colorscheme dracula 
 
-"" omnisharp config
-inoremap <expr> <Tab> pumvisible() ? '<C-n>' :                                                                                                                    
-\ getline('.')[col('.')-2] =~# '[[:alnum:].-_#$]' ? '<C-x><C-o>' : '<Tab>'
-nnoremap <C-o><C-u> :OmniSharpFindUsages<CR>
-nnoremap <C-o><C-d> :OmniSharpGotoDefinition<CR>
-nnoremap <C-o><C-d><C-p> :OmniSharpPreviewDefinition<CR>
-nnoremap <C-o><C-r> :!dotnet run
+
+"" vim os check 
+if system('uname -s') == "Darwin\n"
+  set clipboard=unnamed "OSX
+else
+  set clipboard=unnamedplus "Linux
+endif
 
 "" line highlighting
 set cursorline
@@ -114,6 +153,7 @@ nnoremap gu <nop>
 nnoremap gU <nop>
 
 """" Plugin Configurations
+
 "" Map multicursor
 let g:multi_cursor_use_default_mapping=0
 
@@ -134,10 +174,6 @@ imap <F3> <C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR>
 " set relativenumber to reduce mental math
 " set relativenumber
 
-" set registers to copy p
-set clipboard=unnamed
-set clipboard=unnamedplus
-
 " remap escape
 cnoremap kj <C-C>
 cnoremap jk <C-C>
@@ -151,37 +187,99 @@ tnoremap <Esc> <C-\><C-n>
 " start terminal in insert mode
 au BufEnter * if &buftype == 'terminal' | :startinsert | endif
 " open terminal on ctrl+n
-function! OpenTerminal()
-  split term://bash
-  resize 10
-endfunction
-nnoremap <c-n> :call OpenTerminal()<CR>
+"function! OpenTerminal()
+"  split term://bash
+"  resize 10
+"endfunction
+"nnoremap <c-n> :call OpenTerminal()<CR>
 
-"" Can be enabled or disabled
-let g:webdevicons_enable_nerdtree = 1
-let g:WebDevIconsUnicodeDecorateFolderNodes = 1
-let g:NERDTreeDirArrowExpandable = ' '
-let g:NERDTreeDirArrowCollapsible = ' '
-let g:DevIconsEnableFoldersOpenClose = 1
-let g:DevIconsEnableFolderExtensionPatternMatching = 1
-let g:WebDevIconsNerdTreeAfterGlyphPadding = ' '
-let g:NERDTreeHighlightFoldersFullName = 1
-let g:webdevicons_conceal_nerdtree_brackets = 1
-let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol = ' '
-let g:DevIconsDefaultFolderOpenSymbol = ' '
-
-"" Map Nerdtree to CTRL+N
+""" Map Nerdtree to CTRL+N
 map <C-n> :NERDTreeToggle<CR>
+let g:NERDTreeQuitOnOpen = 1
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeIgnore = []
-let g:NERDTreeStatusline = ''
+let g:NERDTreeHighlightFoldersFullName = 1
+let NERDTreeAutoDeleteBuffer = 1
+let NERDTreeDirArrows = 1
+
+"""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""devicons""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""
+
+" loading the plugin
+let g:webdevicons_enable = 1
+
+" adding the flags to NERDTree
+let g:webdevicons_enable_nerdtree=1
+
+" adding the custom source to unite
+let g:webdevicons_enable_unite = 1 
+
+" adding the column to vimfiler
+let g:webdevicons_enable_vimfiler = 1
+
+" adding to vim-airline's tabline
+let g:webdevicons_enable_airline_tabline = 1
+
+" adding to vim-airline's statusline
+let g:webdevicons_enable_airline_statusline = 1
+
+" ctrlp glyphs
+let g:webdevicons_enable_ctrlp = 1
+
+" adding to vim-startify screen
+let g:webdevicons_enable_startify = 1
+
+" adding to flagship's statusline
+let g:webdevicons_enable_flagship_statusline = 1
+
+" turn on/off file node glyph decorations (not particularly useful)
+let g:WebDevIconsUnicodeDecorateFileNodes = 0 
+
+" use double-width(1) or single-width(0) glyphs
+" only manipulates padding, has no effect on terminal or set(guifont) font
+let g:WebDevIconsUnicodeGlyphDoubleWidth = 0 
+
+" the amount of space to use after the glyph character (default ' ')
+" let g:WebDevIconsNerdTreeAfterGlyphPadding = '' 
+" let g:WebDevIconsNerdTreeBeforeGlyphPadding = ''
+
+" Force extra padding in NERDTree so that the filetype icons line up vertically
+let g:WebDevIconsNerdTreeGitPluginForceVAlign = 0
+
+" Adding the custom source to denite
+let g:webdevicons_enable_denite = 1
+
+" whether or not to show the nerdtree brackets around flags
+let g:webdevicons_conceal_nerdtree_brackets=1
+
+""""""""""""""""""""""""""""""""  config airline
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'default'
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#right_sep = ''
+let g:airline#extensions#tabline#left_alt_sep  = ''
+let g:airline#extensions#tabline#right_alt_sep = ''
+let g:airline#extensions#tabline#show_close_button = 1
+let g:airline#extensions#tabline#fnamemod = ':t'
+
+let g:airline_theme = 'base16_brewer'
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_section_b = '%{strftime("%c")}%'
+
+
 " Automaticaly close nvim if NERDTree is only thing left open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " Toggle
 nnoremap <silent> <C-b> :NERDTreeToggle<CR>
 " fix :E command after Syntastic install (created new Errors command that interfered)
 cabbrev E NERDTreeToggle
+
 
 " fzf
 nnoremap <C-p> :FZF<CR>
@@ -191,6 +289,8 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit'
   \}
 
+nnoremap <silent> <C-f> :Files<CR>
+
 "" Configure vim-easy-align
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
@@ -199,70 +299,14 @@ nmap ga <Plug>(EasyAlign)
 " Align Github-flabored markdown tables (not sure if this works)
 "au FileType markdown vmap <Leader><Bslash> :EasyAlign*<Bar><Enter>
 
-"" ale syntax checking/linting
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
-let g:ale_completion_enabled = 1
-let g:ale_lint_on_enter = 0
-let g:ale_fix_on_save = 1
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-" good guy ale looks good
-let g:ale_sign_error = '❌'
-let g:ale_sign_warning = '⚠️'
-"let g:ale_sign_error = '●'
-"let g:ale_sign_warning = '.'
-" python
-let g:ale_python_pylint_options = '--errors-only'
-" go
-let g:ale_sign_column_always = 1
-let g:ale_fixers = {
-      \'go': ['gofmt'],
-      \'yaml': ['prettier'],
-      \}
-let g:ale_linters = {
-      \'go': ['golint', 'gofmt'],
-      \'yaml': ['yamllint'],
-      \}
-" yaml
-let g:ale_yaml_yamllint_options = "-d 'document-start: disable'"
-" js
-let g:ale_fixers = {
- \ 'javascript': ['eslint']
- \ }
-
-"" lightline configuration:
-function! LinterStatus() abort
-    let l:counts = ale#statusline#Count(bufnr(''))
-    let l:all_errors = l:counts.error + l:counts.style_error
-    let l:all_non_errors = l:counts.total - l:all_errors
-    return l:counts.total == 0 ? 'OK' : printf(
-        \   '%d⨉ %d⚠ ',
-        \   all_non_errors,
-        \   all_errors
-        \)
-endfunction
-set statusline+=%=
-set statusline+=\ %{LinterStatus()}
-
-"" might want export TERM=xterm-256color
-set laststatus=2
-set noshowmode
-let g:lightline = {
-    \ 'colorscheme': 'seoul256',
-    \ }
-" transparent middle bar
-let s:palette = g:lightline#colorscheme#{g:lightline.colorscheme}#palette
-let s:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
-let s:palette.inactive.middle = s:palette.normal.middle
-let s:palette.tabline.middle = s:palette.normal.middle
-
 "show tabs
 "----------------------
 " Shortcut to rapidly toggle `set list`
 map <tab> :set list!<CR>
 
+if exists("g:loaded_webdevicons")
+  call webdevicons#refresh()
+endif
 
 
 
