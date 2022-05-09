@@ -1,4 +1,4 @@
-"" ~/.vimrc
+""" ~/.vimrc
 
 "" Plugins will be downloaded under the specified directory.
 call plug#begin('~/.vim/plugged')
@@ -6,37 +6,21 @@ call plug#begin('~/.vim/plugged')
 "" Declare the list of plugins.
 
 " NERDTree
-Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+"Plug 'scrooloose/nerdtree' 
+Plug 'vwxyutarooo/nerdtree-devicons-syntax'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'PhilRunninger/nerdtree-buffer-ops'
 Plug 'PhilRunninger/nerdtree-visual-selection'
-
-" JS
-Plug 'mxw/vim-jsx'
-Plug 'pangloss/vim-javascript'
-Plug 'jelera/vim-javascript-syntax'
-Plug 'maksimr/vim-jsbeautify'
-Plug 'peitalin/vim-jsx-typescript'
-Plug 'duteng/emmet-vim-react-snippets'
-Plug 'othree/yajs.vim'
-Plug 'othree/javascript-libraries-syntax.vim'
-Plug 'claco/jasmine.vim'
-Plug 'lfilho/cosco.vim'
-
+Plug 'preservim/nerdtree'
 
 " Vim Helpers
-Plug 'tpope/vim-sleuth'
-Plug 'tpope/vim-rhubarb'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'sheerun/vim-polyglot'
 Plug 'christoomey/vim-tmux-navigator'
-"
 "Plug 'dense-analysis/ale'
 Plug 'itchyny/lightline.vim'
-Plug 'scrooloose/nerdtree' 
 Plug 'OmniSharp/omnisharp-vim' 
-Plug 'Xuyuanp/nerdtree-git-plugin' 
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-sleuth'
@@ -50,18 +34,25 @@ Plug 'dracula/vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'inside/vim-search-pulse'
 Plug 'RRethy/vim-illuminate'
-Plug 'airblade/vim-gitgutter'
+Plug 'justinmk/vim-sneak'
 Plug 'mhinz/vim-startify'
-Plug 'neoclide/coc.nvim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 "js helpers
-Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
+Plug 'pangloss/vim-javascript'
 Plug 'jelera/vim-javascript-syntax'
 Plug 'maksimr/vim-jsbeautify'
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'duteng/emmet-vim-react-snippets'
+Plug 'othree/yajs.vim'
+Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'claco/jasmine.vim'
+Plug 'lfilho/cosco.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
 Plug 'bubujka/emmet-vim'
 Plug 'duteng/emmet-vim-react-snippets'
-Plug 'peitalin/vim-jsx-typescript'
 Plug 'leafgarland/typescript-vim'
 
 "fuzzy searching favs
@@ -70,18 +61,14 @@ Plug 'junegunn/fzf.vim'
 
 "graphviz & vim
 Plug 'junegunn/gv.vim'
-Plug 'mhinz/vim-startify'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'leafgarland/typescript-vim'
-Plug 'dracula/vim'
 Plug 'inside/vim-search-pulse'
 Plug 'RRethy/vim-illuminate'
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'airblade/vim-gitgutter'
+Plug 'jreybert/vimagit'
 Plug 'maralla/completor.vim'
 
 " GO 
+Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " Terraform
@@ -138,7 +125,6 @@ let g:airline_powerline_fonts = 1
 
 "set encoding for nerdfonts devicons
 set encoding=utf8
-set guifont="Go\ Mono\ Bold\ Nerd\ Font\ Complete\ Mono"
 
 "gutegtags setting
 let g:gutentags_add_default_project_roots = 0
@@ -164,6 +150,28 @@ let g:LanguageClient_serverCommands = {
        \ 'go': ['gopls']
        \ }
 
+" Open vimagit pane
+nnoremap <leader>gs :Magit<CR>       " git status
+
+"push to remote
+nnoremap <leader>gP :! git push<CR>  " git Push
+
+" Enable deletion of untracked files in Magit
+let g:magit_discard_untracked_do_delete=1
+
+" Show commits for every source line
+nnoremap <Leader>gb :Gblame<CR>  " git blame
+
+" Open current line in the browser
+nnoremap <Leader>gb :.Gbrowse<CR>
+
+" Open visual selection in the browser
+vnoremap <Leader>gb :Gbrowse<CR>
+
+" Add the entire file to the staging area
+nnoremap <Leader>gaf :Gw<CR>      " git add file
+
+
 " Common Go commands
 au FileType go nmap <leader>r <Plug>(go-run)
 au FileType go nmap <leader>b <Plug>(go-build)
@@ -175,10 +183,6 @@ au FileType go nmap <Leader>i <Plug>(go-info)
 
 " Use new vim 8.2 popup windows for Go Doc
 let g:go_doc_popup_window = 1
-
-" Enable lsp for go by using gopls
-let g:completor_filetype_map = {}
-let g:completor_filetype_map.go = {'ft': 'lsp', 'cmd': 'gopls-remote=auto'}"
 
 " WSL yank support
 let s:clip = '/usr/local/bin/clip.exe'  " change this path
@@ -208,14 +212,6 @@ if !has("gui_running")
   set term=screen-256color
 endif
 colorscheme dracula 
-
-
-"" vim os check 
-if system('uname -s') == "Darwin\n"
-  set clipboard=unnamed "OSX
-else
-  set clipboard=unnamedplus "Linux
-endif
 
 "" line highlighting
 set cursorline
@@ -387,14 +383,12 @@ let g:airline_right_sep = ''
 let g:airline_right_alt_sep = ''
 let g:airline_section_b = '%{strftime("%c")}%'
 
-
 " Automaticaly close nvim if NERDTree is only thing left open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " Toggle
 nnoremap <silent> <C-b> :NERDTreeToggle<CR>
 " fix :E command after Syntastic install (created new Errors command that interfered)
 cabbrev E NERDTreeToggle
-
 
 " fzf
 nnoremap <C-p> :FZF<CR>
@@ -413,20 +407,6 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 " Align Github-flabored markdown tables (not sure if this works)
 "au FileType markdown vmap <Leader><Bslash> :EasyAlign*<Bar><Enter>
-
-"" lightline configuration:
-"function! LinterStatus() abort
-"    let l:counts = ale#statusline#Count(bufnr(''))
-"    let l:all_errors = l:counts.error + l:counts.style_error
-"    let l:all_non_errors = l:counts.total - l:all_errors
-"    return l:counts.total == 0 ? 'OK' : printf(
-"        \   '%d⨉ %d⚠ ',
-"        \   all_non_errors,
-"        \   all_errors
-"        \)
-"endfunction
-"set statusline+=%=
-"set statusline+=\ %{LinterStatus()}
 
 "" might want export TERM=xterm-256color
 set laststatus=2

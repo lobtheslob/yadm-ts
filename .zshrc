@@ -1,10 +1,8 @@
- # Path to your oh-my-zsh installation.
- # export ZSH=/Users/TSimpson/.oh-my-zsh
- if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
- fi
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+    source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
 
-   # If you come from bash you might have to change your $PATH.
+# If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:
 export PATH="/usr/local/bin:$PATH"
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
@@ -86,7 +84,7 @@ alias policyupdate="adgpupdate"
 alias appbash="docker run -it -v '/`pwd`':'//code' -v $HOME'/.npmrc':'//root/.npmrc' --rm --volumes-from npmcachervol:rw --volumes-from ${PWD##*/}-npm:rw --entrypoint=bash 287054460789.dkr.ecr.us-east-1.amazonaws.com/polaris/appenv-angular2-polarisplatform"
 alias devbash="docker run -it -v '/`pwd`':'//code' -v $HOME'/.npmrc':'//root/.npmrc' --rm --volumes-from npmcachervol:rw --volumes-from ${PWD##*/}-npm:rw --entrypoint=bash 287054460789.dkr.ecr.us-east-1.amazonaws.com/polaris/devenv-nodejs-polarisplatform"
 alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
- # Docker JJ
+# Docker JJ
 alias dkpsa='docker ps -a'                  # List all containers (default lists just running)
 alias dkcls='docker container ls'           # List containers
 alias dkcps='docker-compose ps'             # List docker-compose containers
@@ -94,7 +92,7 @@ alias dkils='docker image ls'               # List images
 alias dkvls='docker volume ls'              # List volumes
 alias dkmls='docker-machine ls'             # List docker-machines
 alias dkstoprm='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
- # Clean up exited containers (docker < 1.13)
+# Clean up exited containers (docker < 1.13)
 alias dkrmC='docker rm $(docker ps -qaf status=exited)'
 # Clean up dangling images (docker < 1.13)
 alias dkrmI='docker rmi $(docker images -qf dangling=true)'
@@ -104,10 +102,10 @@ alias dkplI='docker images --format "{{ .Repository }}" | grep -v "^<none>$" | x
 alias dkrmV='docker volume rm $(docker volume ls -qf dangling=true)'
 # kills all running docker containers, and does a minimal clean
 alias docker-stupid='docker-compose down ; docker stop $(docker ps -aq) ; docker rm $(docker ps -qa) ; docker network rm $(docker network ls | grep "bridge" | awk "/ / { print $1 }")'
-# kills all running docker containers, and does a larger clean
-alias dmclean='docker-compose down ; docker stop $(docker ps -aq) ; docker rm $(docker ps -qa) ; docker network rm $(docker network ls | grep "bridge" | awk "/ / { print $1 }") ; docker rmi $(docker images --filter "dangling=true" -q --no-trunc)'
-# kills all running docker containers, and purges everything docker has done
-alias dmpurge='docker-compose down ; docker stop $(docker ps -aq) ; docker rm $(docker ps -qa) ; docker network rm $(docker network ls | grep "bridge" | awk "/ / { print $1 }") ; docker volume ls | grep -v DRIVER | while read driver name ; do docker volume rm $name ; done ; docker image ls -a | grep -v "REPOSITORY" | while read repo tag image etc ; do docker rmi $image --force ; done'
+   # kills all running docker containers, and does a larger clean
+   alias dmclean='docker-compose down ; docker stop $(docker ps -aq) ; docker rm $(docker ps -qa) ; docker network rm $(docker network ls | grep "bridge" | awk "/ / { print $1 }") ; docker rmi $(docker images --filter "dangling=true" -q --no-trunc)'
+   # kills all running docker containers, and purges everything docker has done
+   alias dmpurge='docker-compose down ; docker stop $(docker ps -aq) ; docker rm $(docker ps -qa) ; docker network rm $(docker network ls | grep "bridge" | awk "/ / { print $1 }") ; docker volume ls | grep -v DRIVER | while read driver name ; do docker volume rm $name ; done ; docker image ls -a | grep -v "REPOSITORY" | while read repo tag image etc ; do docker rmi $image --force ; done'
 
 startover() {
    echo 'Killing everything'
@@ -160,11 +158,11 @@ nvim $(echo $x | rev | cut -d '/' -f 1,1 | rev)
 ZSH_DISABLE_COMPFIX='true'
 export LC_ALL=en_US.UTF-8 
 export LANG=en_US.UTF-8
-#source ~/.oh-my-zsh/themes/powerlevel9k/powerlevel9k.zsh-theme
 alias ls='ls -G'
-  #################################################
-  ### Colorize Man pages
-  #################################################
+
+#################################################
+### Colorize Man pages
+#################################################
 export MANROFFOPT='-c'
 export LESS_TERMCAP_mb=$(tput bold; tput setaf 2)
 export LESS_TERMCAP_md=$(tput bold; tput setaf 6)
@@ -181,3 +179,8 @@ zstyle ':completion:*' max-errors 3 not-numeric
 zstyle :compinstall filename '/Users/tsimpson/.zshrc'
 
 neofetch
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
