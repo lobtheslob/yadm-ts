@@ -37,6 +37,8 @@ Plug 'RRethy/vim-illuminate'
 Plug 'justinmk/vim-sneak'
 Plug 'mhinz/vim-startify'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'puremourning/vimspector'
+Plug 'puremourning/vim-debug-adapter'
 
 "js helpers
 Plug 'mxw/vim-jsx'
@@ -108,9 +110,6 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
-"tags
-Plug 'ludovicchabant/vim-gutentags'
-
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
@@ -126,13 +125,51 @@ let g:airline_powerline_fonts = 1
 "set encoding for nerdfonts devicons
 set encoding=utf8
 
-"gutegtags setting
+"gutentags setting
 let g:gutentags_add_default_project_roots = 0
 let g:gutentags_project_root = ['package.json', '.git']
 let g:gutentags_generate_on_new = 1
 let g:gutentags_generate_on_missing = 1
 let g:gutentags_generate_on_write = 1
 let g:gutentags_generate_on_empty_buffer = 0
+
+"vimspector mappings
+let g:vimspector_enable_mappings = 'HUMAN'
+nnoremap <Leader>dd :call vimspector#Launch()<CR>
+nnoremap <Leader>de :call vimspector#Reset()<CR>
+nnoremap <Leader>dc :call vimspector#Continue()<CR>
+
+nnoremap <Leader>dt :call vimspector#ToggleBreakpoint()<CR>
+nnoremap <Leader>dT :call vimspector#ClearBreakpoints()<CR>
+
+nmap <Leader>dk <Plug>VimspectorRestart
+nmap <Leader>dh <Plug>VimspectorStepOut
+nmap <Leader>dl <Plug>VimspectorStepInto
+nmap <Leader>dj <Plug>VimspectorStepOver
+
+nmap <leader>ve :VimspectorEval
+nmap <leader>vw :VimspectorWatch
+nmap <leader>vo :VimspectorShowOutput
+nmap <leader>vi <Plug>VimspectorBalloonEval
+xmap <leader>vi <Plug>VimspectorBalloonEval
+
+" for normal mode - the word under the cursor
+nmap <Leader>di <Plug>VimspectorBalloonEval
+" " for visual mode, the visually selected text
+xmap <Leader>di <Plug>VimspectorBalloonEval
+
+"" add WinBar for debug
+"" need to comment this out or the WinBar always exists in vim
+"nnoremenu WinBar.■\ Stop :call vimspector#Stop( { 'interactive': v:false } )<CR>
+"nnoremenu WinBar.▶\ Cont :call vimspector#Continue()<CR>
+"nnoremenu WinBar.▷\ Pause :call vimspector#Pause()<CR>
+"nnoremenu WinBar.↷\ Next :call vimspector#StepOver()<CR>
+"nnoremenu WinBar.→\ Step :call vimspector#StepInto()<CR>
+"nnoremenu WinBar.←\ Out :call vimspector#StepOut()<CR>
+"nnoremenu WinBar.⟲: :call vimspector#Restart()<CR>
+"nnoremenu WinBar.✕ :call vimspector#Reset( { 'interactive': v:false } )<CR>
+
+let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-go', 'CodeLLDB', 'vscode-node-debug2' ]"
 
 "vim-go with gopls
 let g:go_def_mode='gopls'
@@ -149,6 +186,25 @@ let g:completor_filetype_map.go = {'ft': 'lsp', 'cmd': 'gopls -remote=auto'}"
 let g:LanguageClient_serverCommands = {
        \ 'go': ['gopls']
        \ }
+
+" enable mouse gvim
+":set mouse=a
+" disable mouse gvim
+"set mouse-=a
+"set mousehide
+"set guioptions-=m  "menu bar
+"set guioptions-=T  "toolbar
+"set guioptions-=r  "scrollbar
+
+map <F11> <Esc>:call ToggleGUICruft()<cr>
+" by default, hide gui menus
+set guioptions=
+                  
+
+
+" Updatgnature help on jump placdeeholder.e signature help on jump placdeeholder.
+autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
 
 " Open vimagit pane
 nnoremap <leader>gs :Magit<CR>       " git status
@@ -462,21 +518,6 @@ endif
 " this is handled by LanguageClient [LC]
 let g:go_def_mapping_enabled = 0
 
-inoremap <silent><expr> <TAB>
-\ pumvisible() ? "\<C-n>" :
-\ <SID>check_back_space() ? "\<TAB>" :
-\ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-function! s:check_back_space() abort
-let col = col('.') - 1
-return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-" Use <c-space> to trigger completion.
-if has('nvim')
-inoremap <silent><expr> <c-space> coc#refresh()
-else
-inoremap <silent><expr> <c-@> coc#refresh()
-endif
 " Make <CR> auto-select the first completion item and notify coc.nvim to
 " format on enter, <cr> could be remapped by other vim plugin
 inoremap <silent><expr> <cr> pumvisible() ?coc#_select_confirm()
@@ -513,6 +554,7 @@ autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
 " Update signature help on jump placeholder.
 autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
+
 
 " Applying codeAction to the selected region.
 " Example: `<leader>aap` for current paragraph
