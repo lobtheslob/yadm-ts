@@ -7,6 +7,7 @@ call plug#begin('~/.vim/plugged')
 
 " NERDTree
 Plug 'Xuyuanp/nerdtree-git-plugin'
+
 "Plug 'scrooloose/nerdtree' 
 Plug 'vwxyutarooo/nerdtree-devicons-syntax'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
@@ -18,6 +19,15 @@ Plug 'preservim/nerdtree'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'sheerun/vim-polyglot'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'chiel92/vim-autoformat'
+
+" Git autoformat
+Plug 'github/copilot.vim'
+Plug 'tabnine/YouCompleteMe'
+
+" vim notes
+Plug 'vimwiki/vimwiki'
+
 "Plug 'dense-analysis/ale'
 Plug 'itchyny/lightline.vim'
 Plug 'OmniSharp/omnisharp-vim' 
@@ -37,6 +47,7 @@ Plug 'RRethy/vim-illuminate'
 Plug 'justinmk/vim-sneak'
 Plug 'mhinz/vim-startify'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc-lists'
 Plug 'puremourning/vimspector'
 Plug 'puremourning/vim-debug-adapter'
 
@@ -56,6 +67,9 @@ Plug 'mxw/vim-jsx'
 Plug 'bubujka/emmet-vim'
 Plug 'duteng/emmet-vim-react-snippets'
 Plug 'leafgarland/typescript-vim'
+Plug 'prettier/vim-prettier', {
+    \ 'do': 'yarn install --frozen-lockfile --production',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 
 "fuzzy searching favs
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -69,8 +83,11 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'jreybert/vimagit'
 Plug 'maralla/completor.vim'
 
+" cassandra
+Plug 'elubow/cql-vim'
+
 " GO 
-Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+"Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " Terraform
@@ -98,8 +115,8 @@ Plug 'altercation/vim-colors-solarized'
 " DevIcons looded last
 Plug 'ryanoasis/vim-devicons'
 
-"golang helpers
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+"rust helpers
+Plug 'rust-lang/rust.vim' 
 
 "Plug 'maralla/completor.vim'
 if has('nvim')
@@ -118,6 +135,12 @@ call plug#end()
 "else
 "    " ordinary neovim
 "endif
+"
+
+" adding formatting 
+command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
+vmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
 
 "airline
 let g:airline_powerline_fonts = 1
@@ -132,42 +155,6 @@ let g:gutentags_generate_on_new = 1
 let g:gutentags_generate_on_missing = 1
 let g:gutentags_generate_on_write = 1
 let g:gutentags_generate_on_empty_buffer = 0
-
-"vimspector mappings
-let g:vimspector_enable_mappings = 'HUMAN'
-nnoremap <Leader>dd :call vimspector#Launch()<CR>
-nnoremap <Leader>de :call vimspector#Reset()<CR>
-nnoremap <Leader>dc :call vimspector#Continue()<CR>
-
-nnoremap <Leader>dt :call vimspector#ToggleBreakpoint()<CR>
-nnoremap <Leader>dT :call vimspector#ClearBreakpoints()<CR>
-
-nmap <Leader>dk <Plug>VimspectorRestart
-nmap <Leader>dh <Plug>VimspectorStepOut
-nmap <Leader>dl <Plug>VimspectorStepInto
-nmap <Leader>dj <Plug>VimspectorStepOver
-
-nmap <leader>ve :VimspectorEval
-nmap <leader>vw :VimspectorWatch
-nmap <leader>vo :VimspectorShowOutput
-nmap <leader>vi <Plug>VimspectorBalloonEval
-xmap <leader>vi <Plug>VimspectorBalloonEval
-
-" for normal mode - the word under the cursor
-nmap <Leader>di <Plug>VimspectorBalloonEval
-" " for visual mode, the visually selected text
-xmap <Leader>di <Plug>VimspectorBalloonEval
-
-"" add WinBar for debug
-"" need to comment this out or the WinBar always exists in vim
-"nnoremenu WinBar.■\ Stop :call vimspector#Stop( { 'interactive': v:false } )<CR>
-"nnoremenu WinBar.▶\ Cont :call vimspector#Continue()<CR>
-"nnoremenu WinBar.▷\ Pause :call vimspector#Pause()<CR>
-"nnoremenu WinBar.↷\ Next :call vimspector#StepOver()<CR>
-"nnoremenu WinBar.→\ Step :call vimspector#StepInto()<CR>
-"nnoremenu WinBar.←\ Out :call vimspector#StepOut()<CR>
-"nnoremenu WinBar.⟲: :call vimspector#Restart()<CR>
-"nnoremenu WinBar.✕ :call vimspector#Reset( { 'interactive': v:false } )<CR>
 
 let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-go', 'CodeLLDB', 'vscode-node-debug2' ]"
 
@@ -200,30 +187,21 @@ map <F11> <Esc>:call ToggleGUICruft()<cr>
 " by default, hide gui menus
 set guioptions=
                   
-
-
 " Updatgnature help on jump placdeeholder.e signature help on jump placdeeholder.
 autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
-
 " Open vimagit pane
 nnoremap <leader>gs :Magit<CR>       " git status
-
 "push to remote
 nnoremap <leader>gP :! git push<CR>  " git Push
-
 " Enable deletion of untracked files in Magit
 let g:magit_discard_untracked_do_delete=1
-
 " Show commits for every source line
 nnoremap <Leader>gb :Gblame<CR>  " git blame
-
 " Open current line in the browser
 nnoremap <Leader>gb :.Gbrowse<CR>
-
 " Open visual selection in the browser
 vnoremap <Leader>gb :Gbrowse<CR>
-
 " Add the entire file to the staging area
 nnoremap <Leader>gaf :Gw<CR>      " git add file
 
@@ -239,15 +217,6 @@ au FileType go nmap <Leader>i <Plug>(go-info)
 
 " Use new vim 8.2 popup windows for Go Doc
 let g:go_doc_popup_window = 1
-
-" WSL yank support
-let s:clip = '/usr/local/bin/clip.exe'  " change this path
-if executable(s:clip)
- augroup WSLYank
-  autocmd!
-  autocmd TextYankPost * if v:event.operator ==# 'y' | call system(s:clip, @0) | endif
- augroup END
-endif
 
 " Use deoplete. has("nvim") == 0; so this disabled
 let g:deoplete#enable_at_startup = 0
@@ -454,7 +423,17 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit'
   \}
 
+" PLUGIN: FZF
+nnoremap <silent> <Leader>b :Buffers<CR>
 nnoremap <silent> <C-f> :Files<CR>
+nnoremap <silent> <Leader>f :Rg<CR>
+nnoremap <silent> <Leader>/ :BLines<CR>
+nnoremap <silent> <Leader>' :Marks<CR>
+nnoremap <silent> <Leader>g :Commits<CR>
+nnoremap <silent> <Leader>H :Helptags<CR>
+nnoremap <silent> <Leader>hh :History<CR>
+nnoremap <silent> <Leader>h: :History:<CR>
+nnoremap <silent> <Leader>h/ :History/<CR> 
 
 "" Configure vim-easy-align
 " Start interactive EasyAlign in visual mode (e.g. vipga)
